@@ -1,3 +1,5 @@
+package MainContainer;
+
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
