@@ -1,0 +1,1 @@
+<transaction><Acheteur name='Acheteur@192.168.142.1:1099/JADE'>12</Acheteur><Vendeur name='Vendeur@192.168.142.1:1099/JADE'>12</Vendeur><transaction><transaction><Acheteur name='Acheteur@192.168.142.1:1099/JADE'>51</Acheteur><Vendeur name='Vendeur@192.168.142.1:1099/JADE'>51</Vendeur><transaction>

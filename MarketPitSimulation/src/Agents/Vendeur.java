@@ -5,10 +5,17 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import jade.core.AID;
 
 public class Vendeur extends Agent {
 	
+	private final static String PATH = "transactions.txt";
 	private int carte = 300;
 	
 	@Override
@@ -115,13 +122,18 @@ public class Vendeur extends Agent {
 									
 									ACLMessage replyAcceptProposal = aclMessage.createReply();
 									replyAcceptProposal.setPerformative(ACLMessage.CONFIRM);
-									replyAcceptProposal.setContent("<transaction>"
+									
+									String transaction = "<transaction>"
 											+ "<Acheteur name='"+aclMessage.getSender().getName()+"'>"+prixAcheteur+"</Acheteur>"
 											+ "<Vendeur name='"+getAID().getName()+"'>"+carte+"</Vendeur>"
-											+ "<transaction>");
+											+ "<transaction>";
+									
+									replyAcceptProposal.setContent(transaction);
 									
 									Thread.sleep(5000);
 									send(replyAcceptProposal);
+									
+									saveTransaction(transaction);
 									
 									break;
 									
@@ -166,5 +178,33 @@ public class Vendeur extends Agent {
 		send(message);
 		
 	}
+	
+	private void saveTransaction(String transaction) {
+		
+		try {
+			
+			File fic = new File(PATH);
+			FileOutputStream fos = new FileOutputStream(fic,true);
+			PrintStream ps = new PrintStream(fos);
+			
+			ps.append(transaction);
+			
+			
+			ps.close();
+			
+			try {
+				fos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 
 }
