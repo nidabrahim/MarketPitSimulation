@@ -1,8 +1,15 @@
 package Agents;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -10,7 +17,8 @@ public class Acheteur extends Agent {
 	
 	private int carte = 200;
 	private boolean success = false;
-	private String vendeur = "Vendeur";
+	private String vendeur;
+	private List<AID> vendeurs;
 
 	
 	
@@ -22,6 +30,9 @@ public class Acheteur extends Agent {
 		//ACHETEUR DEMANDE UNE NOUVELLE CARTE A L'ADMIN
 		demandeNouvelleCarte();
 		
+		//LA RECHERCHES DES VENDEURS
+		vendeurs = seachForSellers();
+		vendeur = vendeurs.get(0).getLocalName();
 			
 		//ATTENDRE LES REPONSES
 		addBehaviour(new CyclicBehaviour() {
@@ -203,9 +214,36 @@ public class Acheteur extends Agent {
 	}
 	
 	
+	public List<AID> seachForSellers(){
+		
+		vendeurs = new ArrayList<>();
+		DFAgentDescription agentDescription= new DFAgentDescription();
+		ServiceDescription serviceDescription= new ServiceDescription();
+		serviceDescription.setType("carteSelling");
+		agentDescription.addServices(serviceDescription);
+		
+		try {
+			
+			DFAgentDescription[] descriptions= DFService.search(this, agentDescription);
+			
+			for(DFAgentDescription dfad:descriptions){
+				vendeurs.add(dfad.getName());
+			}
+			
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		
+		return vendeurs;
+		
+	}
+		
+	
 	@Override
 	protected void takeDown() {
 		System.out.println("Bye Bye");
 	}
+	
+	
 
 }

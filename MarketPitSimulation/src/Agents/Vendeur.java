@@ -3,6 +3,10 @@ package Agents;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
@@ -25,6 +29,9 @@ public class Vendeur extends Agent {
 		
 		//ACHETEUR DEMANDE UNE NOUVELLE CARTE A L'ADMIN
 		demandeNouvelleCarte();
+		
+		//PUBLIER SES SERVICES
+		register();
 		
 		//ATTENDRE DES REPONSES
 		addBehaviour(new CyclicBehaviour() {
@@ -203,6 +210,24 @@ public class Vendeur extends Agent {
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	private void register() {
+		
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("carteSelling");
+		sd.setName("carteTrading");
+		dfd.addServices(sd);
+		
+		try {
+			DFService.register(this, dfd);
+		}
+		catch (FIPAException fe) {
+			fe.printStackTrace();
 		}
 	}
 	
