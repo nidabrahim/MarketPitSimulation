@@ -19,6 +19,7 @@ public class Acheteur extends Agent {
 	private boolean success = false;
 	private String vendeur;
 	private List<AID> vendeurs;
+	private int iVendeur;
 
 	
 	
@@ -32,7 +33,7 @@ public class Acheteur extends Agent {
 		
 		//LA RECHERCHES DES VENDEURS
 		vendeurs = seachForSellers();
-		vendeur = vendeurs.get(0).getLocalName();
+		vendeur = vendeurs.get(iVendeur).getLocalName();
 			
 		//ATTENDRE LES REPONSES
 		addBehaviour(new CyclicBehaviour() {
@@ -55,7 +56,13 @@ public class Acheteur extends Agent {
 									MessageTemplate.MatchPerformative(ACLMessage.REFUSE),
 									MessageTemplate.or(
 											MessageTemplate.MatchPerformative(ACLMessage.REQUEST),
-											MessageTemplate.MatchPerformative(ACLMessage.INFORM)
+											MessageTemplate.or(
+												MessageTemplate.MatchPerformative(ACLMessage.INFORM),
+												MessageTemplate.or(
+														MessageTemplate.MatchPerformative(ACLMessage.CANCEL),
+														MessageTemplate.MatchPerformative(ACLMessage.FAILURE)
+												)
+											)
 									)
 							)
 					)
@@ -142,6 +149,30 @@ public class Acheteur extends Agent {
 							demandeDAchat(vendeur);
 							
 							break;
+							
+							
+					case ACLMessage.CANCEL:
+						
+						System.out.println("-----------------------------------");
+						System.out.println("> Réception d'une annulation ");
+						System.out.println("From :" + aclMessage.getSender().getName());
+						System.out.println("Contenu : " + aclMessage.getContent());
+						
+						nextVendeur();
+				
+						break;
+						
+						
+					case ACLMessage.FAILURE:
+						
+						System.out.println("-----------------------------------");
+						System.out.println("> Réception d'une annulation ");
+						System.out.println("From :" + aclMessage.getSender().getName());
+						System.out.println("Contenu : " + aclMessage.getContent());
+						
+						nextVendeur();
+						
+						break;
 				
 				}
 				
@@ -203,6 +234,7 @@ public class Acheteur extends Agent {
 		if(carteVendeur > carte) {
 			replyRequest.setPerformative(ACLMessage.REJECT_PROPOSAL);
 			replyRequest.setContent("Carte proposée est trop chère");
+			demandeDAchat(vendeur);
 			
 		}else {
 			replyRequest.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
@@ -239,6 +271,18 @@ public class Acheteur extends Agent {
 	}
 		
 	
+	private void nextVendeur() {
+		
+		if(iVendeur != vendeurs.size()-1) {
+			
+			vendeur = vendeurs.get(++iVendeur).getLocalName();
+			demandeDAchat(vendeur);
+		}
+		else {
+			System.out.println("-----------------------------------");
+			System.out.println("> "+getLocalName()+" : Fin processus d'achat ");
+		}
+	}
 	@Override
 	protected void takeDown() {
 		System.out.println("Bye Bye");

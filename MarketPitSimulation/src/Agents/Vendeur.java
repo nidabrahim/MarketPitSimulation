@@ -15,6 +15,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.core.AID;
 
 public class Vendeur extends Agent {
@@ -39,6 +42,9 @@ public class Vendeur extends Agent {
 			private int prixAcheteur;
 			private String content;
 			private AID requester;
+			private List<AID> requesters = new ArrayList<AID>();
+			private boolean finish = false;
+			private int counter = 1+(int)( Math.random()*5);
 			
 			@Override
 			public void action() {
@@ -92,22 +98,38 @@ public class Vendeur extends Agent {
 
 									ACLMessage replyRequest = aclMessage.createReply();
 									
-									if(prixAcheteur < carte) {
-										if( ! crequester.equals(requester) ) {
-											replyRequest.setPerformative(ACLMessage.REFUSE);
-											replyRequest.setContent("Votre demande est refusée");
+									if(!finish) {
+										
+										if(prixAcheteur < carte) {
+											if( ! requesters.contains(crequester) ) {
+												replyRequest.setPerformative(ACLMessage.REFUSE);
+												replyRequest.setContent("Votre demande est refusée");
+												requesters.add(crequester);
+											}
+											else {
+												
+												if(counter != 0) {
+													replyRequest.setPerformative(ACLMessage.PROPOSE);
+													replyRequest.setContent("Je vous donne une proposition");
+													int carteSugg =  (int)( Math.random()*( carte - prixAcheteur + 1 ) ) + prixAcheteur; 
+													replyRequest.addUserDefinedParameter("carteSuggeree", carteSugg+"");
+													counter--;
+												}
+												else {
+													replyRequest.setPerformative(ACLMessage.FAILURE);
+													replyRequest.setContent("Impossible de vous vendre ma catre");
+												}
+											}
 										}
 										else {
 											replyRequest.setPerformative(ACLMessage.PROPOSE);
-											replyRequest.setContent("Je vous donne pas proposition");
-											int carteSugg =  (int)( Math.random()*( carte - prixAcheteur + 1 ) ) + prixAcheteur; 
-											replyRequest.addUserDefinedParameter("carteSuggeree", carteSugg+"");
+											replyRequest.setContent("Voila ma proposition");
+											replyRequest.addUserDefinedParameter("carteSuggeree", carte+"");
 										}
 									}
 									else {
-										replyRequest.setPerformative(ACLMessage.PROPOSE);
-										replyRequest.setContent("Voila ma proposition");
-										replyRequest.addUserDefinedParameter("carteSuggeree", carte+"");
+										replyRequest.setPerformative(ACLMessage.CANCEL);
+										replyRequest.setContent("J'ai deja vendu ma carte");
 									}
 									
 									requester = crequester;
@@ -122,25 +144,36 @@ public class Vendeur extends Agent {
 							//PROPOSITION ACCEPTEE
 							case ACLMessage.ACCEPT_PROPOSAL:
 								
-									prixAcheteur = Integer.parseInt(aclMessage.getUserDefinedParameter("carteAcheteur"));
-								
-									System.out.println("--------------------------------");
-									System.out.println("> Validation de la transaction ");
-									
 									ACLMessage replyAcceptProposal = aclMessage.createReply();
-									replyAcceptProposal.setPerformative(ACLMessage.CONFIRM);
 									
-									String transaction = "<transaction>"
-											+ "<Acheteur name='"+aclMessage.getSender().getName()+"'>"+prixAcheteur+"</Acheteur>"
-											+ "<Vendeur name='"+getAID().getName()+"'>"+carte+"</Vendeur>"
-											+ "<transaction>";
+									if(!finish) {
+										
+										prixAcheteur = Integer.parseInt(aclMessage.getUserDefinedParameter("carteAcheteur"));
 									
-									replyAcceptProposal.setContent(transaction);
-									
-									Thread.sleep(5000);
-									send(replyAcceptProposal);
-									
-									saveTransaction(transaction);
+										System.out.println("--------------------------------");
+										System.out.println("> Validation de la transaction ");
+										
+										
+										replyAcceptProposal.setPerformative(ACLMessage.CONFIRM);
+										
+										String transaction = "<transaction>"
+												+ "<Acheteur name='"+aclMessage.getSender().getName()+"'>"+prixAcheteur+"</Acheteur>"
+												+ "<Vendeur name='"+getAID().getName()+"'>"+carte+"</Vendeur>\n"
+												+ "<transaction>";
+										
+										replyAcceptProposal.setContent(transaction);
+										
+										Thread.sleep(5000);
+										send(replyAcceptProposal);
+										
+										saveTransaction(transaction);
+										
+										finish = true;
+									}
+									else {
+										replyAcceptProposal.setPerformative(ACLMessage.CANCEL);
+										replyAcceptProposal.setContent("J'ai deja vendu ma carte");
+									}
 									
 									break;
 									
@@ -165,7 +198,8 @@ public class Vendeur extends Agent {
 					} catch (Exception e) {e.printStackTrace(); }}
 			
 		});
-									}
+							
+	}
 					
 	
 	@Override
