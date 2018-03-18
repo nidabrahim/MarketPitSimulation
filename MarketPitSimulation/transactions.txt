@@ -1,3 +1,7 @@
 Vendeur2:39:Acheteur2:85:39
 Vendeur1:45:Acheteur1:60:45
 Vendeur2:43:Acheteur2:34:34
+Vendeur4:16:Acheteur7:85:16
+Vendeur5:18:Acheteur4:81:18
+Vendeur2:14:Acheteur7:62:14
+Vendeur1:71:Acheteur8:96:71
