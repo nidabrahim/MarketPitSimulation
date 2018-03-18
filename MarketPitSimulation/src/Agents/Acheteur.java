@@ -239,7 +239,8 @@ public class Acheteur extends Agent {
 		}else {
 			replyRequest.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 			replyRequest.setContent("Carte proposée est acceptée");
-			replyRequest.addUserDefinedParameter("carteAcheteur", carteVendeur+"");
+			replyRequest.addUserDefinedParameter("carteAchat", carteVendeur+"");
+			replyRequest.addUserDefinedParameter("carteAcheteur", carte+"");
 		}
 
 		Thread.sleep(5000); send(replyRequest);

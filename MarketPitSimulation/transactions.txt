@@ -1,4 +1,3 @@
-<transaction><Acheteur name='Acheteur1@192.168.142.1:1099/JADE'>26</Acheteur><Vendeur name='Vendeur1@192.168.142.1:1099/JADE'>26</Vendeur><transaction><transaction><Acheteur name='Acheteur2@192.168.142.1:1099/JADE'>19</Acheteur><Vendeur name='Vendeur1@192.168.142.1:1099/JADE'>26</Vendeur><transaction><transaction><Acheteur name='Acheteur2@192.168.142.1:1099/JADE'>13</Acheteur><Vendeur name='Vendeur2@192.168.142.1:1099/JADE'>13</Vendeur><transaction><transaction><Acheteur name='Acheteur1@192.168.142.1:1099/JADE'>13</Acheteur><Vendeur name='Vendeur2@192.168.142.1:1099/JADE'>13</Vendeur><transaction><transaction><Acheteur name='Acheteur2@192.168.142.1:1099/JADE'>52</Acheteur><Vendeur name='Vendeur1@192.168.142.1:1099/JADE'>52</Vendeur>
-<transaction><transaction><Acheteur name='Acheteur1@192.168.142.1:1099/JADE'>58</Acheteur><Vendeur name='Vendeur2@192.168.142.1:1099/JADE'>58</Vendeur>
-<transaction><transaction><Acheteur name='Acheteur2@192.168.142.1:1099/JADE'>58</Acheteur><Vendeur name='Vendeur2@192.168.142.1:1099/JADE'>58</Vendeur>
-<transaction>
+Vendeur2:39:Acheteur2:85:39
+Vendeur1:45:Acheteur1:60:45
+Vendeur2:43:Acheteur2:34:34

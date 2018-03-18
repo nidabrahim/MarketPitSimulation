@@ -148,7 +148,8 @@ public class Vendeur extends Agent {
 									
 									if(!finish) {
 										
-										prixAcheteur = Integer.parseInt(aclMessage.getUserDefinedParameter("carteAcheteur"));
+										prixAcheteur = Integer.parseInt(aclMessage.getUserDefinedParameter("carteAchat"));
+										int carteAcheteur = Integer.parseInt(aclMessage.getUserDefinedParameter("carteAcheteur"));
 									
 										System.out.println("--------------------------------");
 										System.out.println("> Validation de la transaction ");
@@ -156,10 +157,8 @@ public class Vendeur extends Agent {
 										
 										replyAcceptProposal.setPerformative(ACLMessage.CONFIRM);
 										
-										String transaction = "<transaction>"
-												+ "<Acheteur name='"+aclMessage.getSender().getName()+"'>"+prixAcheteur+"</Acheteur>"
-												+ "<Vendeur name='"+getAID().getName()+"'>"+carte+"</Vendeur>\n"
-												+ "<transaction>";
+										//VENDEUR:CARTE:ACHETEUR:CARTE:PRIX
+										String transaction = getAID().getLocalName()+":"+carte+":"+aclMessage.getSender().getLocalName()+":"+carteAcheteur+":"+prixAcheteur+"\n";
 										
 										replyAcceptProposal.setContent(transaction);
 										
