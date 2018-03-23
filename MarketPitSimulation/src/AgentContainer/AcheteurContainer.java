@@ -17,7 +17,7 @@ public class AcheteurContainer {
 			profileImpl.setParameter(ProfileImpl.MAIN_HOST,"localhost");
 			AgentContainer agentContainer = runtime.createAgentContainer(profileImpl);
 			
-			for(int i=1; i<=10; i++) {
+			for(int i=1; i<=5; i++) {
 				AgentController agentController = agentContainer.createNewAgent("Acheteur"+i,"Agents.Acheteur", new Object[]{});
 				agentController.start();
 			}

@@ -5,3 +5,13 @@ Vendeur4:16:Acheteur7:85:16
 Vendeur5:18:Acheteur4:81:18
 Vendeur2:14:Acheteur7:62:14
 Vendeur1:71:Acheteur8:96:71
+Vendeur4:82:Acheteur1:83:82
+Vendeur5:52:Acheteur3:80:52
+Vendeur1:74:Acheteur4:76:74
+Vendeur2:62:Acheteur5:64:62
+Vendeur4:33:Acheteur3:74:33
+Vendeur2:10:Acheteur2:11:10
+Vendeur2:34:Acheteur4:55:34
+Vendeur5:31:Acheteur5:47:31
+Vendeur4:12:Acheteur4:17:12
+Vendeur4:25:Acheteur3:87:25
